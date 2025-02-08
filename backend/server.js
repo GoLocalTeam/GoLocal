@@ -1,8 +1,16 @@
-const express = require('express');
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import express from 'express';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import {dbConnect} from './config/db.js';
+
+// const express = require('express');
 const app = express();
-require('dotenv').config();
-const dbConnect = require('./config/db');
-const cors = require('cors');
+dotenv.config();
+// require('dotenv').config();
+// const dbConnect = require('./config/db');
+// const cors = require('cors');
 
 app.use(express.json());
 app.use(cors());
