@@ -12,7 +12,6 @@ dotenv.config();
 // const dbConnect = require('./config/db');
 // const cors = require('cors');
 
-const cookieParser = require('cookie-parser'); //to make cookie available in req.cookie
 app.use(cookieParser());
 
 app.use(express.json());
@@ -24,7 +23,7 @@ app.get('/', (req, res) => {
 });
 
 // routes
-const golocalRoutes = require('./routes/user.route');
+import golocalRoutes from './routes/user.route.js';
 
 // mounting the routes
 app.use('/api/v1', golocalRoutes);
