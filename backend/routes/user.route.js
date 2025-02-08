@@ -1,34 +1,32 @@
-import express from 'express';
+import express from "express";
+import { login, signup, logout, getProfile } from "../controllers/Auth.controller.js";
+import { auth, isUser } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-import {login, signup, logout, getProfile} from '../controllers/Auth.controller';
-import {auth, isUser} from '../middlewares/auth.middleware';
-
-router.post('/login', login);
-router.post('/signup', signup);
-router.get('/logout', logout);
-// router.post('/forgotpassword', forgotPassword);
-// router.put('/resetpassword/:resetToken', resetPassword);
-
-//AuthN route
-router.get('/dashboard', auth, (req, res) => {
-    res.send('Welcome to Dashboard page');
+router.route('/signup').post(signup);
+router.route('/login').post(login);
+router.route('/logout').get(logout);
+router.route('/getProfile').get(auth, isUser, (req, res) => {
+    res.json({
+        success: true,
+        message: 'Welcome to the protected User route.',
+    });
 });
 
-//Protected routes
-router.get("/getProfile", auth, isUser, (req,res)=>{
+router.route('/dashboard').get(auth, (req, res) => {
     res.json({
-        success:true,
-        message:'Welcome to protected User route.',
+        success: true,
+        message: 'Welcome to the Dashboard page.',
     });
-})
+});
 
-// router.get("/shopkeeper", auth, isShopkeeper, (req,res)=>{
+
+// router.route('/shopkeeper').get(auth, isShopkeeper, (req, res) => {
 //     res.json({
-//         success:true,
-//         message:'Welcome to protected ShopKeeper route.',
-//     });
-// })
+//         success: true,
+//         message: 'Welcome to the protected ShopKeeper route.',
+//     });
+// });
 
-module.exports = router;
+export default router;

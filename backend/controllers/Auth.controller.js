@@ -1,10 +1,11 @@
 import bcrypt from "bcrypt";
-import User from "../models/User.model";
+import { User } from "../models/User.js";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 dotenv.config(); //to load the jwt token = golocal in this file
 
 //Signup controller
-exports.signup = async (req, res) => {
+export const signup = async (req, res) => {
     try {
         //get the data from the request body
         const {name, email, password, role, profilePicture, location} = req.body;
@@ -52,7 +53,7 @@ exports.signup = async (req, res) => {
 
 
 //Login controller
-exports.login = async (req,res)=>{
+export const login = async (req,res)=>{
     try{
         //data fetch
         const{email,password} = req.body;
@@ -119,7 +120,7 @@ exports.login = async (req,res)=>{
 }
 
 //Logout controller
-exports.logout = async (req,res)=>{
+export const logout = async (req,res)=>{
     try{
         res.clearCookie("token");
         return res.status(200).json({
@@ -137,7 +138,7 @@ exports.logout = async (req,res)=>{
 }
 
 //Get user controller
-exports.getProfile = async (req,res)=>{
+export const getProfile = async (req,res)=>{
     try{
         const user = await User.findById(req.user.id).select("-password");
         if(!user){

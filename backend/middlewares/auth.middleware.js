@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 dotenv.config();
 
-exports.auth = (req,res,next)=>{
+export const auth = (req,res,next)=>{
     try{
         //extract jwt token
         const token = req.body.token || req.cookies.token || req.header("Authorization").replace("Bearer ","");
@@ -33,7 +34,7 @@ exports.auth = (req,res,next)=>{
 }
 
 // AuthZ middlewares
-exports.isUser = (req,res,next)=>{
+export const isUser = (req,res,next)=>{
     try{
         if(req.user.role === 'user'){
             next();
