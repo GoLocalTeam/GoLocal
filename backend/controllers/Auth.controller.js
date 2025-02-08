@@ -1,7 +1,7 @@
-const bcrypt = require("bcrypt");
-const User = require("../models/User");
-const jwt = require("jsonwebtoken");
-require('dotenv').config(); //to load the jwt token = golocal in this file
+import bcrypt from "bcrypt";
+import User from "../models/User.model";
+import jwt from "jsonwebtoken";
+dotenv.config(); //to load the jwt token = golocal in this file
 
 //Signup controller
 exports.signup = async (req, res) => {

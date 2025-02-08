@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
+
 const router = express.Router();
 
-const {login, signup, logout, getProfile} = require('../controllers/Auth.controller');
-const {auth, isUser} = require('../middlewares/auth.middleware');
+import {login, signup, logout, getProfile} from '../controllers/Auth.controller';
+import {auth, isUser} from '../middlewares/auth.middleware';
 
 router.post('/login', login);
 router.post('/signup', signup);

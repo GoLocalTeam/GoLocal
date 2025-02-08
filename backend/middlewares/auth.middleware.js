@@ -1,7 +1,5 @@
-//auth, isStudent, isAdmin
-
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+import jwt from "jsonwebtoken";
+dotenv.config();
 
 exports.auth = (req,res,next)=>{
     try{
