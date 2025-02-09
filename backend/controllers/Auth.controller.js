@@ -162,5 +162,28 @@ export const getProfile = async (req,res)=>{
 }
 
 //Update user controller
+// export const updateUser = async (req,res)=>{
+//     try {
+//         // Check if the logged-in user is updating their own profile
+//         if (req.user.id !== req.params.id) {
+//             return res.status(403).json({ success: false, message: 'Unauthorized' });
+//         }
 
+//         const { name, email, phone } = req.body;
 
+//         const updatedUser = await User.findByIdAndUpdate(
+//             req.params.id,
+//             { name, email, phone },
+//             { new: true, runValidators: true }
+//         ).select('-password'); // Exclude password
+
+//         if (!updatedUser) {
+//             return res.status(404).json({ success: false, message: 'User not found' });
+//         }
+
+//         res.status(200).json({ success: true, message: 'User updated successfully', user: updatedUser });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ success: false, message: 'Internal Server Error' });
+//     }
+// }

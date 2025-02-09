@@ -13,7 +13,6 @@ dotenv.config();
 // const cors = require('cors');
 
 app.use(cookieParser());
-
 app.use(express.json());
 app.use(cors());
 
@@ -23,10 +22,12 @@ app.get('/', (req, res) => {
 });
 
 // routes
-import golocalRoutes from './routes/user.route.js';
+import userRoutes from './routes/user.route.js';
+import shopRoutes from './routes/shop.route.js';
 
 // mounting the routes
-app.use('/api/v1', golocalRoutes);
+app.use('/api/v1', userRoutes);
+app.use('/api/v1', shopRoutes);
 
 dbConnect();
 app.listen(process.env.PORT || 4000, () => {

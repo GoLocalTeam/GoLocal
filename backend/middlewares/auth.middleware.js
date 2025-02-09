@@ -51,3 +51,21 @@ export const isUser = (req,res,next)=>{
         });
     }
 }
+
+export const isShopkeeper = (req,res,next)=>{
+    try{
+        if(req.user.role === 'shopkeeper'){
+            next();
+        }else{
+            return res.status(403).json({
+                success:false,
+                message:'You are not authorized to access this route',
+            });
+        }
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:'Internal server error',
+        });
+    }
+}
