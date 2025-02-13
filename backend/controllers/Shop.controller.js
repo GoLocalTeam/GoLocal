@@ -8,6 +8,11 @@ export const createShop = async (req, res) => {
         //get the data from the request body
         const {owner, name, description, category, contact, type, location, workingHours, status} = req.body;
 
+
+        if(req.user.id !== owner){
+            return res.status(403).json({ message: "You are not authorized to create a shop for another user" });
+        }
+
         //data validation
         if (!owner || !name || !description || !category || !contact || !type || !location) {
             return res.status(400).json({ message: "All fields are required" });
@@ -49,6 +54,12 @@ export const updateShop = async (req, res) => {
     try {
         //get the data from the request body
         const {name, description, category, contact, type, location, workingHours, status} = req.body;
+
+        const shopU = await Shop.findById(req.params.shopId);
+
+        if(req.body.owner !== shopU.owner.toString()){
+            return res.status(403).json({ message: "You are not authorized to update a shop for another user" });
+        }
 
         //data validation
         if (!name || !description || !category || !contact || !type || !location) {
@@ -146,6 +157,6 @@ export const getShopById = async (req, res) => {
     }
     catch (error) {
         console.log(error);
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error from getShopById" });
     }
 }

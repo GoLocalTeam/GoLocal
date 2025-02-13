@@ -1,7 +1,7 @@
 import express from "express";
 import { createShop, updateShop, deleteShop, getShops, getShopById} from "../controllers/Shop.controller.js";
-import { auth, isShopkeeper} from "../middlewares/auth.middleware.js";
-import { get } from "http";
+import { auth, isShopkeeper, isOwner} from "../middlewares/auth.middleware.js";
+// import { get } from "http";
 const router = express.Router();
 
 //Protected routes
