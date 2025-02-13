@@ -25,11 +25,13 @@ app.get('/', (req, res) => {
 import userRoutes from './routes/user.route.js';
 import shopRoutes from './routes/shop.route.js';
 import productRoutes from './routes/product.route.js';
+import servicesRoute from './routes/service.route.js'
 
 // mounting the routes
 app.use('/api/v1', userRoutes);
 app.use('/api/v1', shopRoutes);
 app.use('/api/v1', productRoutes);
+app.use('/api/v1', servicesRoute);
 
 dbConnect();
 app.listen(process.env.PORT || 4000, () => {

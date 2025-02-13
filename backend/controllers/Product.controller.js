@@ -58,12 +58,21 @@ export const deleteProduct = async (req, res) => {
 // Get all products
 export const getProducts = async (req, res) => {
   try {
-    const products = await Product.find();
-    res.status(200).json(products);
+      console.log("UPAR");
+      const products = await Product.find();
+      
+      console.log("NICHHE");
+      if (!products.length) {
+          return res.status(404).json({ message: "No products found for this user" });
+      }
+
+      res.status(200).json(products);
   } catch (error) {
-    res.status(500).json({ error: error });
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 // Get a product by id
 export const getProductById = async (req, res) => {

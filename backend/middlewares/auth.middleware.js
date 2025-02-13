@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import Shop from "../models/Shop.js";
 import Product from "../models/Product.js";
+import Service from "../models/Service.js";
 dotenv.config();
 
 export const auth = (req,res,next)=>{
@@ -77,9 +78,11 @@ export const isOwner = async (req, res, next) => {
     try {
         // Find the shop by ID
         const prod_id = req?.params?.productId;
+        const serve_id = req?.params?.serviceId;
         // const shop_id = await Product.findById(prod_id).shop || req?.body?.shop;
         const product = await Product.findById(prod_id);
-        const shop_id = product?.shop || req?.body?.shop;
+        const service = await Service.findById(serve_id);
+        const shop_id = product?.shop || req?.body?.shop || service?.shop;
         const shop = await Shop.findById(shop_id);  
         console.log(prod_id);
         console.log(shop_id);
