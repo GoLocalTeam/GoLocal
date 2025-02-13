@@ -11,6 +11,7 @@ router.route('/getProfile').get(auth, isUser, (req, res) => {
     res.json({
         success: true,
         message: 'Welcome to the protected User route.',
+        user : req.user,
     });
 });
 

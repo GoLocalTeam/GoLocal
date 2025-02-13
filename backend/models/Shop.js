@@ -29,4 +29,5 @@ const shopSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Shop", shopSchema);
+const Shop = mongoose.model("Shop", shopSchema);
+export default Shop;
