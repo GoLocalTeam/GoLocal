@@ -29,5 +29,7 @@ const shopSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+shopSchema.index({ name: "text", description: "text", category: "text" });
+
 const Shop = mongoose.model("Shop", shopSchema);
 export default Shop;
