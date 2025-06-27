@@ -20,14 +20,21 @@ function getGravatar(email) {
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
-  // Simulate auth state
   const token = localStorage.getItem('authToken');
   const user = JSON.parse(localStorage.getItem('user') || 'null');
 
-  const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('user');
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await axios.get('http://localhost:8000/api/logout', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      navigate('/');
+      setMobileOpen(false);
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
   };
 
   const avatarUrl = user?.avatar || getGravatar(user?.email);
@@ -38,14 +45,13 @@ const Navbar = () => {
         <Store className="w-7 h-7 text-primary" />
         <span className="text-2xl font-bold text-primary tracking-tight">GoLocal</span>
       </div>
-      {/* Desktop Nav */}
       <div className="hidden md:flex gap-8 text-base font-medium">
         <a href="#features" className="hover:text-primary transition">Features</a>
-        <a href="#shops" className="hover:text-primary transition">Shops</a>
-        <a href="#services" className="hover:text-primary transition">Services</a>
+        <Link to="/shops" className="hover:text-primary transition">Shops</Link>
+        <Link to="/products" className="hover:text-primary transition">Products</Link>
+        <Link to="/services" className="hover:text-primary transition">Services</Link>
         <a href="#contact" className="hover:text-primary transition">Contact</a>
       </div>
-      {/* Auth/User Actions */}
       <div className="hidden md:flex items-center gap-4">
         {token && user ? (
           <div className="relative group">
@@ -72,18 +78,17 @@ const Navbar = () => {
           </>
         )}
       </div>
-      {/* Mobile Hamburger */}
       <button className="md:hidden p-2 rounded hover:bg-primary/10 dark:hover:bg-secondary/10 transition" onClick={() => setMobileOpen(!mobileOpen)}>
         {mobileOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
       </button>
-      {/* Mobile Menu */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setMobileOpen(false)}>
           <div className="absolute top-0 right-0 w-64 h-full bg-white dark:bg-darkCard shadow-lg flex flex-col gap-6 p-6 animate-slide-in">
             <button className="self-end mb-2" onClick={() => setMobileOpen(false)}><X className="w-7 h-7" /></button>
             <a href="#features" className="hover:text-primary transition" onClick={() => setMobileOpen(false)}>Features</a>
-            <a href="#shops" className="hover:text-primary transition" onClick={() => setMobileOpen(false)}>Shops</a>
-            <a href="#services" className="hover:text-primary transition" onClick={() => setMobileOpen(false)}>Services</a>
+            <Link to="/shops" className="hover:text-primary transition" onClick={() => setMobileOpen(false)}>Shops</Link>
+            <Link to="/products" className="hover:text-primary transition" onClick={() => setMobileOpen(false)}>Products</Link>
+            <Link to="/services" className="hover:text-primary transition" onClick={() => setMobileOpen(false)}>Services</Link>
             <a href="#contact" className="hover:text-primary transition" onClick={() => setMobileOpen(false)}>Contact</a>
             <div className="flex flex-col gap-3 mt-4">
               {token && user ? (
@@ -116,4 +121,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;

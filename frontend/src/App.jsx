@@ -1,31 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
-import ThemeToggle from './components/ThemeToggle';
-import { Outlet } from 'react-router-dom';
 
-function App() {
-  // Dark mode state
-  const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem('theme') === 'dark';
-  });
+     import React from 'react';
+     import { Routes, Route } from 'react-router-dom';
+     import LandingPage from './pages/LandingPage';
+     import Signup from './pages/Signup';
+     import Login from './pages/Login';
+     import Dashboard from './pages/Dashboard';
+     import Profile from './pages/Profile';
+     import ShopList from './components/ShopList';
+     import CreateShop from './components/CreateShop';
+     import ShopDetails from './components/ShopDetails';
+     import ProductList from './components/ProductList';
+     import ServiceList from './components/ServiceList';
+     import Search from './components/Search';
 
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  }, [darkMode]);
+     const App = () => {
+       return (
+         <Routes>
+           <Route path="/" element={<LandingPage />} />
+           <Route path="/signup" element={<Signup />} />
+           <Route path="/login" element={<Login />} />
+           <Route path="/dashboard" element={<Dashboard />} />
+           <Route path="/profile" element={<Profile />} />
+           <Route path="/shops" element={<ShopList />} />
+           <Route path="/create-shop" element={<CreateShop />} />
+           <Route path="/shops/:shopId" element={<ShopDetails />} />
+           <Route path="/products" element={<ProductList />} />
+           <Route path="/services" element={<ServiceList />} />
+           <Route path="/search" element={<Search />} />
+         </Routes>
+       );
+     };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
-      <Navbar />
-      <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
-      <Outlet />
-    </div>
-  );
-}
-
-export default App;
+     export default App;
+     
