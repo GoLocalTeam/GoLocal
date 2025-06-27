@@ -1,53 +1,64 @@
-import React, { useEffect, useRef } from 'react';
-import { MapPin, Star, Users, Shield } from 'lucide-react';
-import VanillaTilt from 'vanilla-tilt';
+import React from 'react';
+import { Search, MapPin, Star, ShieldCheck, Users } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-function Features() {
-  const tiltRefs = useRef([]);
+const features = [
+  {
+    icon: <Search className="w-8 h-8 text-primary" />,
+    title: 'Powerful Search',
+    desc: 'Find shops and services by category, location, keywords, and proximity.'
+  },
+  {
+    icon: <MapPin className="w-8 h-8 text-secondary" />,
+    title: 'Geolocation',
+    desc: 'See nearby businesses on an interactive map with Google Maps integration.'
+  },
+  {
+    icon: <Star className="w-8 h-8 text-accent" />,
+    title: 'Reviews & Ratings',
+    desc: 'Read and leave reviews to help others find the best local providers.'
+  },
+  {
+    icon: <ShieldCheck className="w-8 h-8 text-primary" />,
+    title: 'Secure Auth',
+    desc: 'JWT-based authentication and role selection for customers and shopkeepers.'
+  },
+  {
+    icon: <Users className="w-8 h-8 text-secondary" />,
+    title: 'Community',
+    desc: 'Connect with your neighborhood and support local businesses.'
+  },
+];
 
-  useEffect(() => {
-    tiltRefs.current.forEach((element) => {
-      if (element) {
-        VanillaTilt.init(element, {
-          max: 15,
-          speed: 400,
-          glare: true,
-          'max-glare': 0.5,
-        });
-      }
-    });
-  }, []);
+const Features = () => (
+  <section id="features" className="py-16 px-4 max-w-6xl mx-auto">
+    <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-gray-900 dark:text-white">Features</h2>
+    <motion.div
+      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={{
+        hidden: {},
+        visible: { transition: { staggerChildren: 0.15 } }
+      }}
+    >
+      {features.map((f, i) => (
+        <motion.div
+          key={i}
+          className="bg-lightCard dark:bg-darkCard rounded-xl shadow p-6 flex flex-col items-center text-center gap-4 transition-colors"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: i * 0.1 }}
+          viewport={{ once: true }}
+        >
+          <div>{f.icon}</div>
+          <h3 className="text-xl font-semibold text-gray-800 dark:text-white">{f.title}</h3>
+          <p className="text-gray-600 dark:text-gray-300">{f.desc}</p>
+        </motion.div>
+      ))}
+    </motion.div>
+  </section>
+);
 
-  return (
-    <section id="services" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Services</h2>
-          <p className="text-xl text-gray-600">Discover the wide range of services available in your area</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {[
-            { icon: <MapPin className="h-8 w-8" />, title: "Home Services", desc: "Plumbers, electricians, and more" },
-            { icon: <Star className="h-8 w-8" />, title: "Professional Services", desc: "Lawyers, accountants, consultants" },
-            { icon: <Users className="h-8 w-8" />, title: "Personal Care", desc: "Salons, spas, fitness trainers" },
-            { icon: <Shield className="h-8 w-8" />, title: "Education", desc: "Tutors and instructors" }
-          ].map((service, i) => (
-            <div 
-              key={i} 
-              ref={el => tiltRefs.current[i] = el}
-              className="bg-teal-50 rounded-2xl p-6 text-center hover:bg-teal-100 transition-colors cursor-pointer transform-gpu"
-            >
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-teal-600 text-white mb-4">
-                {service.icon}
-              </div>
-              <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
-              <p className="text-gray-600">{service.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export default Features;
+export default Features; 

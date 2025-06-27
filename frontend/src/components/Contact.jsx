@@ -1,66 +1,61 @@
 import React from 'react';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { motion } from 'framer-motion';
 
-function Contact() {
+const Contact = () => {
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+
+  const onSubmit = (data) => {
+    toast.success('Message sent! We will get back to you soon.');
+    reset();
+  };
+
   return (
-    <section id="contact" className="py-20 bg-teal-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-2">
-            <div className="p-12 bg-gradient-to-br from-teal-600 to-teal-700 text-white">
-              <h2 className="text-3xl font-bold mb-6">Get in Touch</h2>
-              <p className="text-lg mb-8">Have questions about our services? We're here to help!</p>
-              <div className="space-y-6">
-                <div className="flex items-center space-x-4">
-                  <Phone className="h-6 w-6" />
-                  <span>+1 (555) 123-4567</span>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <Mail className="h-6 w-6" />
-                  <span>support@localfinder.com</span>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <MapPin className="h-6 w-6" />
-                  <span>123 Business Street, City, State 12345</span>
-                </div>
-              </div>
-            </div>
-            <div className="p-12">
-              <form className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                  <input
-                    type="email"
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-                  <textarea
-                    rows={4}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                  ></textarea>
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-teal-600 text-white py-3 rounded-lg hover:bg-teal-700 transition-colors font-medium"
-                >
-                  Send Message
-                </button>
-              </form>
-            </div>
-          </div>
+    <section id="contact" className="py-16 px-4 max-w-3xl mx-auto">
+      <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-gray-900 dark:text-white">Contact Us</h2>
+      <motion.div
+        className="bg-lightCard dark:bg-darkCard rounded-xl shadow p-8 flex flex-col gap-6"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        viewport={{ once: true }}
+      >
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+          <input
+            type="text"
+            placeholder="Your Name"
+            className="p-3 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-darkBg text-gray-900 dark:text-white focus:outline-primary"
+            {...register('name', { required: 'Name is required' })}
+          />
+          {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
+          <input
+            type="email"
+            placeholder="Your Email"
+            className="p-3 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-darkBg text-gray-900 dark:text-white focus:outline-primary"
+            {...register('email', { required: 'Email is required', pattern: { value: /\S+@\S+\.\S+/, message: 'Invalid email' } })}
+          />
+          {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
+          <textarea
+            placeholder="Your Message"
+            rows={4}
+            className="p-3 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-darkBg text-gray-900 dark:text-white focus:outline-primary"
+            {...register('message', { required: 'Message is required' })}
+          />
+          {errors.message && <span className="text-red-500 text-sm">{errors.message.message}</span>}
+          <button type="submit" className="px-6 py-3 bg-primary text-white rounded-lg font-semibold shadow hover:bg-primary/90 transition self-end">Send Message</button>
+        </form>
+        <div className="flex flex-col md:flex-row gap-6 justify-between mt-6">
+          <div className="flex items-center gap-2 text-gray-700 dark:text-gray-200"><Mail className="w-5 h-5 text-primary" /> support@golocal.com</div>
+          <div className="flex items-center gap-2 text-gray-700 dark:text-gray-200"><Phone className="w-5 h-5 text-primary" /> +91 98765 43210</div>
+          <div className="flex items-center gap-2 text-gray-700 dark:text-gray-200"><MapPin className="w-5 h-5 text-primary" /> India</div>
         </div>
-      </div>
+        <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar theme="colored" />
+      </motion.div>
     </section>
   );
-}
+};
 
-export default Contact;
+export default Contact; 

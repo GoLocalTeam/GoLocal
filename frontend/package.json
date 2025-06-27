@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.0.18",
     "framer-motion": "^12.4.7",
-    "lucide-react": "^0.475.0",
+    "lucide-react": "^0.263.0",
+    "@fontsource/inter": "^5.0.14",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.2.0",

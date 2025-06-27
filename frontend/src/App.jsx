@@ -1,24 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Features from './components/Features';
-import Reviews from './components/Reviews';
-import Stats from './components/Stats';
-import HowItWorks from './components/HowItWorks';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
+import ThemeToggle from './components/ThemeToggle';
+import { Outlet } from 'react-router-dom';
 
 function App() {
+  // Dark mode state
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [darkMode]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
       <Navbar />
-      <Hero />
-      <Features />
-      <Reviews />
-      <Stats />
-      <HowItWorks />
-      <Contact />
-      <Footer />
+      <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
+      <Outlet />
     </div>
   );
 }
