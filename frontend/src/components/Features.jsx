@@ -32,7 +32,9 @@ const features = [
 
 const Features = () => (
   <section id="features" className="py-16 px-4 max-w-6xl mx-auto">
-    <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-gray-900 dark:text-white">Features</h2>
+    <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-gray-900 dark:text-darkText">
+      Platform Features
+    </h2>
     <motion.div
       className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
       initial="hidden"
@@ -53,8 +55,8 @@ const Features = () => (
           viewport={{ once: true }}
         >
           <div>{f.icon}</div>
-          <h3 className="text-xl font-semibold text-gray-800 dark:text-white">{f.title}</h3>
-          <p className="text-gray-600 dark:text-gray-300">{f.desc}</p>
+          <h3 className="text-xl font-semibold text-gray-800 dark:text-darkText">{f.title}</h3>
+          <p className="text-gray-600 dark:text-darkTextSecondary">{f.desc}</p>
         </motion.div>
       ))}
     </motion.div>

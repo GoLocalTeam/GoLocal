@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { toast, ToastContainer } from 'react-toastify';
 import { motion } from 'framer-motion';
 import Loader from '../src/components/Loader';
-import axios from 'axios';
+import { authAPI } from '../src/services/api';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -14,11 +14,12 @@ const Login = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const res = await axios.post('http://localhost:5000/api/v1/login', data, { withCredentials: true });
-      // Assuming backend returns { token, user }
-      const { token, user } = res.data;
+      const response = await authAPI.login(data);
+      const { token, user } = response.data;
+      
       localStorage.setItem('authToken', token);
       localStorage.setItem('user', JSON.stringify(user));
+      
       toast.success('Logged in successfully!');
       setTimeout(() => {
         navigate('/dashboard');

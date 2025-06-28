@@ -19,15 +19,39 @@ import {
   Clock,
   DollarSign
 } from 'lucide-react';
+import { dashboardAPI } from '../src/services/api';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState(null);
+  const [recentActivity, setRecentActivity] = useState([]);
 
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem('user') || 'null');
-    setUser(userData);
-    setLoading(false);
+    const loadDashboardData = async () => {
+      try {
+        const userData = JSON.parse(localStorage.getItem('user') || 'null');
+        setUser(userData);
+
+        if (userData) {
+          // Load stats based on user role
+          const statsData = userData.role === 'shopkeeper' 
+            ? await dashboardAPI.getShopkeeperStats()
+            : await dashboardAPI.getCustomerStats();
+          setStats(statsData);
+
+          // Load recent activity
+          const activityData = await dashboardAPI.getRecentActivity();
+          setRecentActivity(activityData);
+        }
+      } catch (error) {
+        console.error('Error loading dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDashboardData();
   }, []);
 
   if (loading) {
@@ -50,6 +74,30 @@ const Dashboard = () => {
   }
 
   const isShopkeeper = user.role === 'shopkeeper';
+
+  // Helper function to get icon component
+  const getIconComponent = (iconName) => {
+    const icons = {
+      users: Users,
+      star: Star,
+      package: Package,
+      search: Search,
+      heart: Heart,
+    };
+    return icons[iconName] || Clock;
+  };
+
+  // Helper function to get color classes
+  const getColorClasses = (color) => {
+    const colors = {
+      green: 'bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400',
+      blue: 'bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
+      purple: 'bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
+      red: 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400',
+      yellow: 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400',
+    };
+    return colors[color] || 'bg-gray-100 dark:bg-gray-900/20 text-gray-600 dark:text-gray-400';
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-accent/5 dark:from-darkCard/50 dark:to-darkBg/50">
@@ -83,14 +131,14 @@ const Dashboard = () => {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
         >
-          {isShopkeeper ? (
+          {isShopkeeper && stats ? (
             // Shopkeeper Stats
             <>
               <div className="bg-white dark:bg-darkCard rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">Total Services</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">24</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalServices}</p>
                   </div>
                   <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
                     <Package className="w-6 h-6 text-blue-600 dark:text-blue-400" />
@@ -101,7 +149,7 @@ const Dashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">Total Customers</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">156</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalCustomers}</p>
                   </div>
                   <div className="w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
                     <Users className="w-6 h-6 text-green-600 dark:text-green-400" />
@@ -112,7 +160,7 @@ const Dashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">Revenue</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">₹45K</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">₹{stats.totalRevenue}K</p>
                   </div>
                   <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg flex items-center justify-center">
                     <DollarSign className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
@@ -123,7 +171,7 @@ const Dashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">Rating</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">4.8</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.averageRating}</p>
                   </div>
                   <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center">
                     <Star className="w-6 h-6 text-purple-600 dark:text-purple-400" />
@@ -131,14 +179,14 @@ const Dashboard = () => {
                 </div>
               </div>
             </>
-          ) : (
+          ) : !isShopkeeper && stats ? (
             // Customer Stats
             <>
               <div className="bg-white dark:bg-darkCard rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">Favorite Shops</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">12</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.favoriteShops}</p>
                   </div>
                   <div className="w-12 h-12 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center">
                     <Heart className="w-6 h-6 text-red-600 dark:text-red-400" />
@@ -149,7 +197,7 @@ const Dashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">Reviews Given</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">8</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.reviewsGiven}</p>
                   </div>
                   <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
                     <Star className="w-6 h-6 text-blue-600 dark:text-blue-400" />
@@ -160,7 +208,7 @@ const Dashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">Searches</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">23</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.searches}</p>
                   </div>
                   <div className="w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
                     <Search className="w-6 h-6 text-green-600 dark:text-green-400" />
@@ -171,7 +219,7 @@ const Dashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">Nearby Shops</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">15</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.nearbyShops}</p>
                   </div>
                   <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center">
                     <MapPin className="w-6 h-6 text-purple-600 dark:text-purple-400" />
@@ -179,6 +227,19 @@ const Dashboard = () => {
                 </div>
               </div>
             </>
+          ) : (
+            // Loading state for stats
+            Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="bg-white dark:bg-darkCard rounded-xl p-6 shadow-lg animate-pulse">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-2"></div>
+                    <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
+                  </div>
+                  <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                </div>
+              </div>
+            ))
           )}
         </motion.div>
 
@@ -252,68 +313,25 @@ const Dashboard = () => {
                 Recent Activity
               </h2>
               <div className="space-y-4">
-                {isShopkeeper ? (
-                  // Shopkeeper Activity
-                  <>
-                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                      <div className="w-8 h-8 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center">
-                        <Users className="w-4 h-4 text-green-600 dark:text-green-400" />
+                {recentActivity.length > 0 ? (
+                  recentActivity.map((activity, index) => {
+                    const IconComponent = getIconComponent(activity.icon);
+                    return (
+                      <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getColorClasses(activity.color)}`}>
+                          <IconComponent className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-900 dark:text-white">{activity.message}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{activity.time}</p>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">New customer inquiry</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">2 hours ago</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                      <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center">
-                        <Star className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">New 5-star review</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">5 hours ago</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                      <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900/20 rounded-full flex items-center justify-center">
-                        <Package className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">Service updated</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">1 day ago</p>
-                      </div>
-                    </div>
-                  </>
+                    );
+                  })
                 ) : (
-                  // Customer Activity
-                  <>
-                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                      <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center">
-                        <Search className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">Searched for "bakery"</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">1 hour ago</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                      <div className="w-8 h-8 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center">
-                        <Heart className="w-4 h-4 text-red-600 dark:text-red-400" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">Added shop to favorites</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">3 hours ago</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                      <div className="w-8 h-8 bg-yellow-100 dark:bg-yellow-900/20 rounded-full flex items-center justify-center">
-                        <Star className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">Left a review</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">1 day ago</p>
-                      </div>
-                    </div>
-                  </>
+                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                    No recent activity
+                  </div>
                 )}
               </div>
             </motion.div>

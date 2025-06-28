@@ -1,5 +1,6 @@
 import React from 'react';
-import { MapPin, Store } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { MapPin, Store, Package, Wrench } from 'lucide-react';
 import { Typewriter } from 'react-simple-typewriter';
 import { motion } from 'framer-motion';
 
@@ -26,9 +27,28 @@ const Hero = () => {
         <p className="text-lg md:text-2xl text-gray-600 dark:text-gray-300 max-w-xl">
           Discover, connect, and support your neighborhood businesses. Find the best shops and services, all in one place.
         </p>
-        <div className="flex gap-4 mt-4">
-          <a href="#shops" className="px-6 py-3 bg-primary text-white rounded-lg font-semibold shadow hover:bg-primary/90 transition">Find Shops</a>
-          <a href="#services" className="px-6 py-3 bg-secondary text-white rounded-lg font-semibold shadow hover:bg-secondary/90 transition">Find Services</a>
+        <div className="flex flex-col sm:flex-row gap-4 mt-4">
+          <Link 
+            to="/shops" 
+            className="px-6 py-3 bg-primary text-white rounded-lg font-semibold shadow hover:bg-primary/90 transition flex items-center justify-center gap-2"
+          >
+            <Store className="w-5 h-5" />
+            Find Shops
+          </Link>
+          <Link 
+            to="/services" 
+            className="px-6 py-3 bg-secondary text-white rounded-lg font-semibold shadow hover:bg-secondary/90 transition flex items-center justify-center gap-2"
+          >
+            <Wrench className="w-5 h-5" />
+            Find Services
+          </Link>
+          <Link 
+            to="/products" 
+            className="px-6 py-3 bg-accent text-white rounded-lg font-semibold shadow hover:bg-accent/90 transition flex items-center justify-center gap-2"
+          >
+            <Package className="w-5 h-5" />
+            Browse Products
+          </Link>
         </div>
       </div>
       <div className="flex-1 flex items-center justify-center">

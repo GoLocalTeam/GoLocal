@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { toast, ToastContainer } from 'react-toastify';
 import { motion } from 'framer-motion';
 import Loader from '../src/components/Loader';
-import axios from 'axios';
+import { authAPI } from '../src/services/api';
 import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
@@ -14,7 +14,13 @@ const Signup = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      await axios.post('http://localhost:5000/api/v1/signup', data, { withCredentials: true });
+      // Add location field as required by backend
+      const signupData = {
+        ...data,
+        location: 'Default Location', // This should be dynamic based on user input or geolocation
+      };
+      
+      await authAPI.signup(signupData);
       toast.success('Account created! Please login.');
       setTimeout(() => {
         navigate('/login');

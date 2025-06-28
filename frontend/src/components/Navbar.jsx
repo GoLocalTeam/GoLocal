@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Store, User, LogOut, Menu, X } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import md5 from 'blueimp-md5';
 
 function getInitials(name) {
@@ -20,6 +20,11 @@ function getGravatar(email) {
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
+<<<<<<< HEAD
+=======
+  const location = useLocation();
+  // Simulate auth state
+>>>>>>> fb242a6 (Shops, Products, Services pages)
   const token = localStorage.getItem('authToken');
   const user = JSON.parse(localStorage.getItem('user') || 'null');
 
@@ -39,11 +44,30 @@ const Navbar = () => {
 
   const avatarUrl = user?.avatar || getGravatar(user?.email);
 
+  // Contact navigation handler
+  const handleContactClick = (e) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      // Already on landing, just scroll
+      const el = document.getElementById('contact');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // Navigate to landing, then scroll
+      navigate('/');
+      setTimeout(() => {
+        const el = document.getElementById('contact');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 400); // Wait for landing page to render
+    }
+    setMobileOpen(false);
+  };
+
   return (
-    <nav className="w-full px-4 py-3 flex items-center justify-between bg-white/80 dark:bg-darkCard/80 shadow-md backdrop-blur-md sticky top-0 z-50 transition-colors duration-300">
-      <div className="flex items-center gap-2">
+    <nav className="w-full px-4 py-3 flex items-center justify-between bg-white/80 dark:bg-darkCard/90 dark:text-darkText shadow-md backdrop-blur-md sticky top-0 z-50 transition-colors duration-300 border-b dark:border-b dark:border-darkBorder">
+      <Link to="/" className="flex items-center gap-2">
         <Store className="w-7 h-7 text-primary" />
         <span className="text-2xl font-bold text-primary tracking-tight">GoLocal</span>
+<<<<<<< HEAD
       </div>
       <div className="hidden md:flex gap-8 text-base font-medium">
         <a href="#features" className="hover:text-primary transition">Features</a>
@@ -51,6 +75,15 @@ const Navbar = () => {
         <Link to="/products" className="hover:text-primary transition">Products</Link>
         <Link to="/services" className="hover:text-primary transition">Services</Link>
         <a href="#contact" className="hover:text-primary transition">Contact</a>
+=======
+      </Link>
+      {/* Desktop Nav */}
+      <div className="hidden md:flex gap-8 text-base font-medium">
+        <Link to="/shops" className="hover:text-primary transition">Shops</Link>
+        <Link to="/services" className="hover:text-primary transition">Services</Link>
+        <Link to="/products" className="hover:text-primary transition">Products</Link>
+        <a href="#contact" className="hover:text-primary transition" onClick={handleContactClick}>Contact</a>
+>>>>>>> fb242a6 (Shops, Products, Services pages)
       </div>
       <div className="hidden md:flex items-center gap-4">
         {token && user ? (
@@ -85,11 +118,18 @@ const Navbar = () => {
         <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setMobileOpen(false)}>
           <div className="absolute top-0 right-0 w-64 h-full bg-white dark:bg-darkCard shadow-lg flex flex-col gap-6 p-6 animate-slide-in">
             <button className="self-end mb-2" onClick={() => setMobileOpen(false)}><X className="w-7 h-7" /></button>
+<<<<<<< HEAD
             <a href="#features" className="hover:text-primary transition" onClick={() => setMobileOpen(false)}>Features</a>
             <Link to="/shops" className="hover:text-primary transition" onClick={() => setMobileOpen(false)}>Shops</Link>
             <Link to="/products" className="hover:text-primary transition" onClick={() => setMobileOpen(false)}>Products</Link>
             <Link to="/services" className="hover:text-primary transition" onClick={() => setMobileOpen(false)}>Services</Link>
             <a href="#contact" className="hover:text-primary transition" onClick={() => setMobileOpen(false)}>Contact</a>
+=======
+            <Link to="/shops" className="hover:text-primary transition" onClick={() => setMobileOpen(false)}>Shops</Link>
+            <Link to="/services" className="hover:text-primary transition" onClick={() => setMobileOpen(false)}>Services</Link>
+            <Link to="/products" className="hover:text-primary transition" onClick={() => setMobileOpen(false)}>Products</Link>
+            <a href="#contact" className="hover:text-primary transition" onClick={handleContactClick}>Contact</a>
+>>>>>>> fb242a6 (Shops, Products, Services pages)
             <div className="flex flex-col gap-3 mt-4">
               {token && user ? (
                 <>

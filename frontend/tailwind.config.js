@@ -12,8 +12,14 @@ module.exports = {
         primary: '#0ea5e9', // sky-500
         secondary: '#6366f1', // indigo-500
         accent: '#f59e42', // orange-400
-        darkBg: '#18181b',
-        darkCard: '#27272a',
+        // Improved dark mode palette
+        darkBg: '#23272f',      // main dark background
+        darkBgGradientFrom: '#23272f', // for gradients
+        darkBgGradientTo: '#1a1d23',   // for gradients
+        darkCard: '#2d3340',    // card background
+        darkBorder: '#353b48',  // border color
+        darkText: '#f8fafc',    // main text
+        darkTextSecondary: '#b0b8c1', // secondary text
         lightBg: '#f9fafb',
         lightCard: '#fff',
       },
