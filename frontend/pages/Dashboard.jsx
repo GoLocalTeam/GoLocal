@@ -20,6 +20,7 @@ import {
   DollarSign
 } from 'lucide-react';
 import { dashboardAPI } from '../src/services/api';
+import DashboardShopkeeperCard from '../src/components/DashboardShopkeeperCard';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -259,6 +260,7 @@ const Dashboard = () => {
                 Quick Actions
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {isShopkeeper && <DashboardShopkeeperCard />}
                 {isShopkeeper ? (
                   <>
                     <button className="p-4 bg-primary/10 dark:bg-primary/20 rounded-lg hover:bg-primary/20 dark:hover:bg-primary/30 transition-colors">
