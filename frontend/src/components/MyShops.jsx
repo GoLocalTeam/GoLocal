@@ -3,6 +3,8 @@ import { shopAPI } from '../services/api';
 import { Plus, Edit, Trash2, Store } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
+import ProductList from './ProductList';
+import ServiceList from './ServiceList';
 
 const initialForm = {
   name: '',
@@ -21,6 +23,7 @@ const MyShops = () => {
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState(initialForm);
   const [currentShopId, setCurrentShopId] = useState(null);
+  const [manageModal, setManageModal] = useState({ open: false, type: null, shop: null });
 
   // Fetch shops owned by the shopkeeper
   useEffect(() => {
@@ -141,6 +144,14 @@ const MyShops = () => {
                   <Trash2 className="w-4 h-4" /> Delete
                 </button>
               </div>
+              <div className="flex gap-2 mt-2">
+                <button onClick={() => setManageModal({ open: true, type: 'products', shop })} className="flex-1 px-3 py-2 bg-blue-100 text-blue-600 rounded-lg font-semibold hover:bg-blue-200 transition flex items-center gap-2">
+                  <Plus className="w-4 h-4" /> Manage Products
+                </button>
+                <button onClick={() => setManageModal({ open: true, type: 'services', shop })} className="flex-1 px-3 py-2 bg-green-100 text-green-600 rounded-lg font-semibold hover:bg-green-200 transition flex items-center gap-2">
+                  <Plus className="w-4 h-4" /> Manage Services
+                </button>
+              </div>
             </motion.div>
           ))}
         </motion.div>
@@ -186,6 +197,33 @@ const MyShops = () => {
                 <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-4 py-2 bg-gray-200 dark:bg-darkBg text-gray-700 dark:text-darkTextSecondary rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-darkCard transition">Cancel</button>
               </div>
             </form>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Manage Products/Services Modal */}
+      {manageModal.open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={() => setManageModal({ open: false, type: null, shop: null })}>
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="relative bg-lightCard dark:bg-darkCard rounded-xl shadow-lg p-6 sm:p-8 w-full max-w-3xl max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-200 dark:scrollbar-thumb-darkBorder dark:scrollbar-track-gray-700"
+            onClick={e => e.stopPropagation()}>
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-primary dark:hover:text-primary text-2xl font-bold focus:outline-none"
+              onClick={() => setManageModal({ open: false, type: null, shop: null })}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-darkText">
+              Manage {manageModal.type === 'products' ? 'Products' : 'Services'} for {manageModal.shop?.name}
+            </h3>
+            {manageModal.type === 'products' ? (
+              <ProductList shopId={manageModal.shop._id} />
+            ) : (
+              <ServiceList shopId={manageModal.shop._id} />
+            )}
           </motion.div>
         </div>
       )}

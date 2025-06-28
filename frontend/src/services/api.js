@@ -61,21 +61,21 @@ export const shopAPI = {
 // Service API
 export const serviceAPI = {
   getAllServices: () => api.get('/services'),
-  getServiceById: (serviceId) => api.get(`/shops/services/${serviceId}`),
-  getServicesByShop: (shopId) => api.get(`/shops/services/shop/${shopId}`),
-  createService: (serviceData) => api.post('/shops/services', serviceData),
-  updateService: (serviceId, serviceData) => api.put(`/shops/services/${serviceId}`, serviceData),
-  deleteService: (serviceId) => api.delete(`/shops/services/${serviceId}`),
+  getServiceById: (shopId, serviceId) => api.get(`/shops/${shopId}/services/${serviceId}`),
+  getServicesByShop: (shopId) => api.get(`/shops/${shopId}/services`),
+  createService: (shopId, serviceData) => api.post(`/shops/${shopId}/services`, serviceData),
+  updateService: (shopId, serviceId, serviceData) => api.put(`/shops/${shopId}/services/${serviceId}`, serviceData),
+  deleteService: (shopId, serviceId) => api.delete(`/shops/${shopId}/services/${serviceId}`),
 };
 
 // Product API
 export const productAPI = {
   getAllProducts: () => api.get('/products'),
-  getProductById: (productId) => api.get(`/shops/products/${productId}`),
-  getProductsByShop: (shopId) => api.get(`/shops/products/shop/${shopId}`),
-  createProduct: (productData) => api.post('/shops/products', productData),
-  updateProduct: (productId, productData) => api.put(`/shops/products/${productId}`, productData),
-  deleteProduct: (productId) => api.delete(`/shops/products/${productId}`),
+  getProductById: (shopId, productId) => api.get(`/shops/${shopId}/products/${productId}`),
+  getProductsByShop: (shopId) => api.get(`/shops/${shopId}/products`),
+  createProduct: (shopId, productData) => api.post(`/shops/${shopId}/products`, productData),
+  updateProduct: (shopId, productId, productData) => api.put(`/shops/${shopId}/products/${productId}`, productData),
+  deleteProduct: (shopId, productId) => api.delete(`/shops/${shopId}/products/${productId}`),
 };
 
 // Search API

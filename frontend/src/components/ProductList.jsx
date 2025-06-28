@@ -28,7 +28,7 @@ import { DollarSign, Search, Filter, Star, ShoppingCart, Package } from 'lucide-
 import { productAPI } from '../services/api';
 import { toast } from 'react-toastify';
 
-const ProductList = () => {
+const ProductList = ({ shopId }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -40,7 +40,12 @@ const ProductList = () => {
     const loadProducts = async () => {
       try {
         setLoading(true);
-        const response = await productAPI.getAllProducts();
+        let response;
+        if (shopId) {
+          response = await productAPI.getProductsByShop(shopId);
+        } else {
+          response = await productAPI.getAllProducts();
+        }
         setProducts(response.data || []);
         setFilteredProducts(response.data || []);
       } catch (error) {
@@ -54,7 +59,7 @@ const ProductList = () => {
     };
 
     loadProducts();
-  }, []);
+  }, [shopId]);
 
   useEffect(() => {
     // Filter products based on search term, category, and price range

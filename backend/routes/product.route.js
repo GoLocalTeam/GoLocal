@@ -6,13 +6,13 @@ const router = express.Router();
 
 //Protected routes
 //Add a middleware to check that the user is from this shop only
-router.route('/shops/products').post(auth, isShopkeeper, isOwner,  createProduct); //create a new product
-router.route('/shops/products/:productId').put(auth, isShopkeeper, isOwner, updateProduct);  //update a product
-router.route('/shops/products/:productId').delete(auth, isShopkeeper, isOwner, deleteProduct);  //delete a product
+router.route('/shops/:shopId/products').post(auth, isShopkeeper, isOwner,  createProduct); //create a new product
+router.route('/shops/:shopId/products/:productId').put(auth, isShopkeeper, isOwner, updateProduct);  //update a product
+router.route('/shops/:shopId/products/:productId').delete(auth, isShopkeeper, isOwner, deleteProduct);  //delete a product
 
 //Public routes
 router.route('/products').get( getProducts); //get all products
-router.route('/shops/products/:productId').get(auth, getProductById); //get a product of a shop by id
-router.route('/shops/products/shop/:shopId').get(auth, getProductsByShop); //get all products of a shop
+router.route('/shops/:shopId/products/:productId').get(auth, getProductById); //get a product of a shop by id
+router.route('/shops/:shopId/products').get(auth, getProductsByShop); //get all products of a shop
 
 export default router;

@@ -5,9 +5,10 @@ dotenv.config(); //to load the jwt token = golocal in this file
 // Create a new product
 export const createProduct = async (req, res) => {
   try {
-    const { shop, name, description, price, stock, category, image } = req.body;
+    const { name, description, price, stock, category, image } = req.body;
+    const { shopId } = req.params;
     const product = new Product({
-      shop,
+      shop: shopId,
       name,
       description,
       price,
@@ -88,7 +89,8 @@ export const getProductById = async (req, res) => {
 // Get all products by shop
 export const getProductsByShop = async (req, res) => {
     try {
-      const products = await Product.find({ shop: req.params.shopId });
+      const { shopId } = req.params;
+      const products = await Product.find({ shop: shopId });
       res.status(200).json(products);
     } catch (error) {
       res.status(500).json({ error: error });

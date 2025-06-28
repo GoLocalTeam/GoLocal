@@ -5,9 +5,10 @@ dotenv.config();
 // Create a new product
 export const createService = async (req, res) => {
   try {
-    const { shop, name, description, price, duration, availability } = req.body;
+    const { name, description, price, duration, availability } = req.body;
+    const { shopId } = req.params;
     const service = new Service({
-      shop,
+      shop: shopId,
       name,
       description,
       price,
@@ -87,7 +88,8 @@ export const getServiceById = async (req, res) => {
 // Get all products by shop
 export const getServicesByShop = async (req, res) => {
     try {
-      const service = await Service.find({ shop: req.params.shopId });
+      const { shopId } = req.params;
+      const service = await Service.find({ shop: shopId });
       res.status(200).json(service);
     } catch (error) {
       res.status(500).json({ error: error });

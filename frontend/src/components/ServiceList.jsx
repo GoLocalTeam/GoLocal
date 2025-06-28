@@ -27,7 +27,7 @@ import { Clock, DollarSign, Search, Filter, Star, MapPin } from 'lucide-react';
 import { serviceAPI } from '../services/api';
 import { toast } from 'react-toastify';
 
-const ServiceList = () => {
+const ServiceList = ({ shopId }) => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -38,7 +38,12 @@ const ServiceList = () => {
     const loadServices = async () => {
       try {
         setLoading(true);
-        const response = await serviceAPI.getAllServices();
+        let response;
+        if (shopId) {
+          response = await serviceAPI.getServicesByShop(shopId);
+        } else {
+          response = await serviceAPI.getAllServices();
+        }
         setServices(response.data || []);
         setFilteredServices(response.data || []);
       } catch (error) {
@@ -52,7 +57,7 @@ const ServiceList = () => {
     };
 
     loadServices();
-  }, []);
+  }, [shopId]);
 
   useEffect(() => {
     // Filter services based on search term and price range
