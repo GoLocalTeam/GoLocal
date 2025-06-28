@@ -12,17 +12,12 @@
   "dependencies": {
     "@fontsource/inter": "^5.0.14",
     "@heroicons/react": "^2.0.18",
-    "axios": "^1.10.0",
-    "blueimp-md5": "^2.19.0",
     "framer-motion": "^12.4.7",
     "lucide-react": "^0.263.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-hook-form": "^7.58.1",
-    "react-router-dom": "^7.6.2",
-    "react-simple-typewriter": "^5.0.1",
-    "react-spinners": "^0.17.0",
-    "react-toastify": "^11.0.5",
+    "react-router-dom": "^7.2.0",
+    "tailwind-scrollbar": "^4.0.2",
     "vanilla-tilt": "^1.8.1"
   },
   "devDependencies": {
